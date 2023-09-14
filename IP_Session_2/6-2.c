@@ -6,7 +6,9 @@ function. And the drawRoom() function is required to draw a room with specific l
 and also point out the position of given X and Y value.
 */
 
-void drawRoom(int length, int width, int X, int Y);     // Declare tbe drawRoom() function
+#include <stdio.h>                                      // Include the standard I/O library
+
+void drawRoom(int length, int width, int X, int Y);     // Declare the drawRoom() function
 
 int main(void) {                                        // Define the main() function
     drawRoom(2,2,0,1);                                  // The given struct of the main() function in handout
@@ -46,4 +48,5 @@ void drawRoom(int length, int width, int X, int Y) {    // Define the drawRoom()
     drawLineWithPlayer(length, X);                      // Draw the line which the player locates in
     for (int i=Y+1; i<width; i++) drawLine(length);     // Draw the line until reach the Down Horizon
     drawHorizon(length);                                // Draw the down horizon of the room
+    putchar('\n');                                      // Turn to the next line
 }

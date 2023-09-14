@@ -45,6 +45,6 @@ int GuessNumber(void) {
         else if (Answer > RightAnswer)                                                  // If get the answer bigger than the right one, it gives user some help
             printf("Your answer is bigger than the right answer.\n");
     }
-    printf("Your find the right answer!");                                              // Print the line to tell the user the game ended
+    printf("Your find the right answer!\n");                                              // Print the line to tell the user the game ended
     return GuessesTime;                                                                 // Return the guess times as the return value
 }
