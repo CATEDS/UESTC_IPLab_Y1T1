@@ -1,3 +1,16 @@
+/*
+    @file   4-2-2.c
+    @brief  Write a program to calculate the total resistance of the circuit
+            and the electric current through the circuit.
+            R1 = 123Ω
+            R2 = 234Ω
+            R3 = 345Ω
+            R4 = 456Ω
+            R5 = 567Ω
+            R6 = 678Ω
+            R7 = 789Ω
+            Print the electric current through the circuit.
+*/
 #include <stdio.h>  // Include the standard I/O library
 
 double Ohm_Law(int Volt, double R) { return (float)Volt*1000/R; }   // Define the Ohm_Law() function

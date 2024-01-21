@@ -1,9 +1,15 @@
 /*
-    TODO
+    This program is designed to serve the X's and O's game.
+    In this edition, player plays the game with the computer.
+    And the computer put the chess totally randomly.
 */
+
+/*-------------------The Include Part-------------------*/
 
 #include <stdio.h>      // Include the standard I/O Library
 #include <stdbool.h>    // Include the standard bool Library
+#include <time.h>       // Include the time Library
+#include <stdlib.h>     // Include the standard library
 
 /*
         Computer Keyboard                     Easy
@@ -17,37 +23,19 @@ Row 2 >     1   2   3           Row 2 >     6   7   8
               column                          column
 */
 
-enum KB {None, X=-1, O=1};  // Define the status of the keyboard
-enum KB keyboard[3][3] = {  // Define and init the keyboard with 3 rows and 3 columns.
+/*-------------------The User Definition Part-------------------*/
+
+typedef enum {None, X=-1, O=1} KB;  // Define the status of the keyboard
+KB keyboard[3][3] = {  // Define and init the keyboard with 3 rows and 3 columns.
     {0, 0, 0},
     {0, 0, 0},
     {0, 0, 0}
 };
-void Put_Num2RowAndCol_CK(int NUM, enum KB piece) {
-    NUM = (NUM-1)%3 + (2-(NUM-1)/3)*3;
-    /*
-    The explanation of this expression:
-    It's an expression that can convert the input of the computer keyboard
-    to the position of the "easy" pattern.
-    We use (NUM-1)/3 to count the row number (Computer Keyboard), then use
-    2-(NUM-1)/3 to count the row number (Easy).
-    Also we use (NUM-1)%3 to count the column number.
-    Finally, we use Row*3 + Colunm to calculate the number of the keyboard
-    (Easy)
-   */
-    keyboard[0][NUM] = piece;
-    /*
-    The explanation of this instruction:
-    Actually, we know that the 2-D Array of y rows and x columns can also be treated
-    as an 1-D Array of x*y nodes.
-    And the type of the name of a 2-D Array is actually int**. So the value of the 
-    Keyboard[0][NUM] (Even NUM is bigger than the colunms) is actually **(ptr + NUM)
-    So it's also a accessible way to use the array.
-    */
-}
 
-void PrintTheBoard(void) {                                                  // Define the function to clear the page and print the game board
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); // Use the given way to clear the page.
+/*-------------------The User Function Part-------------------*/
+
+void Print_Board(void) {                                                    // Define the function to clear the page and print the game board
+    printf("\n\n\n\n\n\n\n\n\n\n");                                         // Use the given way to clear the page.
     for (int i=0; i<3; i++) {                                               // Use the loop to traverse the rows.
         for (int j=0; j<3; j++)                                             // Use the loop to traverse the columns.
             if (keyboard[i][j] == X) putchar('X');                          // Print the X if there is an X on the position
@@ -71,11 +59,11 @@ bool isEnded(void) {                                                        // D
             if (keyboard[i][j]) isFilled++;                                 // Examine if all the positions are filled with chessmans. If so, then end the game.
         }
         if (Verti == -3 || Hori == -3 || Slant_1 == -3 || Slant_2 == -3) {  // Whenever the sum of one line reach -3. the person plays X wins the game.
-            printf("The person play X win the game.\n");                    // Print the line to tell the winner of the game.
+            printf("The person play X wins the game.\n");                   // Print the line to tell the winner of the game.
             return true;                                                    // Return the value to tell the program that the game is ended.
         }
         if (Verti == 3 || Hori == 3 || Slant_1 == 3 || Slant_2 == 3) {      // Whenever the sum of one line reach +3. the person plays O wins the game.
-            printf("The person play O win the game.\n");                    // Print the line to tell the winner of the game.
+            printf("The person play O wins the game.\n");                   // Print the line to tell the winner of the game.
             return true;                                                    // Return the value to tell the program that the game is ended.
         }
     }
@@ -86,19 +74,57 @@ bool isEnded(void) {                                                        // D
     return false;                                                           // Return the value to tell the program that the game is not ended.
 }
 
-int main(void) {
-    PrintTheBoard();
-    while (true) {
+void Put_O_ByRandom(void) {
+    srand(time(NULL));              // Set the seed of the set of random number
+    int row, col;
+    do {
+        row = rand()%3;             // Get the number by random
+        col = rand()%3;
+    } while (keyboard[row][col]);   // Which means do the process until it's not empty
+    keyboard[row][col] = O;
+    Print_Board();
+}
+
+void Put_X_fromPlayer(void) {
+    while (1) {
         int PosiInput;
         printf("Choose the position you want to put X: _\b");
         scanf("%d", &PosiInput);
-        Put_Num2RowAndCol_CK(PosiInput, X);
-        PrintTheBoard();
+        PosiInput = (PosiInput-1)%3 + (2-(PosiInput-1)/3)*3;
+        /*
+            The explanation of this expression:
+            It's an expression that can convert the input of the computer keyboard
+            to the position of the "easy" pattern.
+            We use (NUM-1)/3 to count the row number (Computer Keyboard), then use
+            2-(NUM-1)/3 to count the row number (Easy).
+            Also we use (NUM-1)%3 to count the column number.
+            Finally, we use Row*3 + Colunm to calculate the number of the keyboard (Easy)
+        */
+        if (!keyboard[0][PosiInput]) {  // This statement means this block is empty
+            keyboard[0][PosiInput] = X;
+            Print_Board();
+            /*
+                The explanation of this instruction:
+                Actually, we know that the 2-D Array of y rows and x columns can also be treated
+                as an 1-D Array of x*y nodes.
+                And the type of the name of a 2-D Array can be treated as int**. So the value of the 
+                Keyboard[0][NUM] (Even NUM is bigger than the colunms) is actually **(ptr + NUM)
+                So it's also a accessible way to use the array.
+            */
+            break;
+        }
+        Print_Board();
+        printf("Invalid Input!\n");
+    }
+}
+/*-------------------The Main Function Part-------------------*/
+
+int main(void) {
+    Print_Board();
+    while (true) {
+        Put_X_fromPlayer();
         if (isEnded()) break;
-        printf("Choose the position you want to put O: _\b");
-        scanf("%d", &PosiInput);
-        Put_Num2RowAndCol_CK(PosiInput, O);
-        PrintTheBoard();
+        Put_O_ByRandom();
         if (isEnded()) break;
     }
 }

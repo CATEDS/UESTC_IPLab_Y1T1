@@ -30,6 +30,10 @@ int GuessNumber(void) {
     int LowerBound = RightAnswer - rand()%100;                                          // Decide the lower bound of the range
     int UpperBound = RightAnswer + rand()%100;                                          // Decide the Upper bound of the range
     int Answer;                                                                         // Init the random variable to get the answer from the user
+
+        // CHEAT LINE
+        printf("%d\n",RightAnswer);
+
     int GuessesTime = 0;                                                                // Init the Guess times variable to calculate the result
     printf("Guess the integer between %d and %d.\n", LowerBound, UpperBound);           // Output the guide line
     printf("The number can be exactly divided by %d.\n", canBeDividedBy);               // Print the extra information of the right answer

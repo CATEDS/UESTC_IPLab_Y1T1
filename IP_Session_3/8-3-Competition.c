@@ -1,10 +1,9 @@
 /*
     This program is designed to serve the X's and O's game.
-    In this edition, player plays the game with the computer.
-    And the computer put the chess in a more clever way.
+    In this edition, player plays the game with another player.
 */
 
-/*----------------------The Include Part----------------------*/
+/*-------------------The Include Part-------------------*/
 
 #include <stdio.h>      // Include the standard I/O Library
 #include <stdbool.h>    // Include the standard bool Library
@@ -74,73 +73,7 @@ bool isEnded(void) {                                                        // D
     return false;                                                           // Return the value to tell the program that the game is not ended.
 }
 
-void Put_O_Clever(void) {
-    // Part 1 : Declare the user's type definitions.
-    //          I define 2 enums and 1 struct to store the data.
-    typedef enum {Row_1, Row_2, Row_3, Col_1, Col_2, Col_3, Slant_1, Slant_2, None} Line;
-    typedef enum {Rank_1, Rank_2, Rank_3} Priority;
-    typedef struct { Line line; Priority priority; } ToDo;
-    ToDo todo = {None,Rank_3}; // Use a struct to store it's decision.
-    // Part 2 : To find whether there is a line already have 2 chesses of one player.
-    //          This is the most prior thing the computer need to deal with.
-    int Row_sum, Col_sum, Slant_sum_1 = 0, Slant_sum_2 = 0;
-    for (int i=0; i<3; i++) {
-        Row_sum = Col_sum = 0;
-        for (int j=0; j<3; j++) {
-            Row_sum += keyboard[i][j];
-            Col_sum += keyboard[j][i];
-        }
-        if (Row_sum==2)     { todo.line = (Line)(i);   todo.priority = Rank_1; }
-        if (Col_sum==2)     { todo.line = (Line)(i+3); todo.priority = Rank_1; }
-        if (Row_sum==-2 && todo.priority>Rank_2)    { todo.line = (Line)(i);   todo.priority = Rank_2; }
-        if (Col_sum==-2 && todo.priority>Rank_2)    { todo.line = (Line)(i+3); todo.priority = Rank_2; }
-        Slant_sum_1 += keyboard[i][i];
-        Slant_sum_2 += keyboard[i][2-i];
-    }
-    if (Slant_sum_1==2)     { todo.line = Slant_1; todo.priority = Rank_1; }
-    if (Slant_sum_2==2)     { todo.line = Slant_2; todo.priority = Rank_1; }
-    if (Slant_sum_1==-2 && todo.priority>Rank_2)    { todo.line = Slant_1; todo.priority = Rank_2; }
-    if (Slant_sum_2==-2 && todo.priority>Rank_2)    { todo.line = Slant_2; todo.priority = Rank_2; }
-    // Part 3 : Deal with the line according to the result.
-    //          When the priority is upper than Rank_3, fill the only position left.
-    if (todo.priority!=Rank_3) {
-        if (todo.line>=Row_1 && todo.line<=Row_3) 
-            for (int i=0; i<3; i++) 
-                if (!keyboard[todo.line][i]) keyboard[todo.line][i] = O;
-        if (todo.line>=Col_1 && todo.line<=Col_3)
-            for (int i=0; i<3; i++)
-                if (!keyboard[i][todo.line-3]) keyboard[i][todo.line-3] = O;
-        if (todo.line==Slant_1)
-            for (int i=0; i<3; i++)
-                if (!keyboard[i][i]) keyboard[i][i] = O;
-        if (todo.line==Slant_2)
-            for (int i=0; i<3; i++)
-                if (!keyboard[i][2-i]) keyboard[i][2-i] = O;
-    }
-    // Part 4 : If there are no line that must to be dealed with, check if the center was filled.
-    //          If the center is filled, fill one corner randomly.
-    //          If the corners are all filled, fill one side randomly.
-    else if (todo.priority==Rank_3) {
-        if (!keyboard[1][1]) keyboard[1][1] = O;
-        else if (!keyboard[0][0]+!keyboard[0][2]+!keyboard[2][0]+!keyboard[2][2]) {
-            int i, j;
-            do {
-                i = rand()%2*2; j = rand()%2*2;
-            } while (keyboard[i][j]);
-            keyboard[i][j] = O;
-        }
-        else {
-            int i;
-            do {
-                i = rand()%4*2+1;
-            } while (keyboard[0][i]);
-            keyboard[0][i] = O;         // The comment is the same as Line 162
-        }
-    }
-    Print_Board();
-}
-
-void Put_X_fromPlayer(void) {
+void Put_fromPlayer(KB piece) {
     while (1) {
         int PosiInput;
         printf("Choose the position you want to put X: _\b");
@@ -156,7 +89,7 @@ void Put_X_fromPlayer(void) {
             Finally, we use Row*3 + Colunm to calculate the number of the keyboard (Easy)
         */
         if (!keyboard[0][PosiInput]) {  // This statement means this block is empty
-            keyboard[0][PosiInput] = X;
+            keyboard[0][PosiInput] = piece;
             Print_Board();
             /*
                 The explanation of this instruction:
@@ -172,16 +105,14 @@ void Put_X_fromPlayer(void) {
         printf("Invalid Input!\n");
     }
 }
-
 /*-------------------The Main Function Part-------------------*/
 
 int main(void) {
-    srand(time(NULL));          // Init the Random Numbers according to the time.
     Print_Board();
     while (true) {
-        Put_X_fromPlayer();
+        Put_fromPlayer(X);
         if (isEnded()) break;
-        Put_O_Clever();
+        Put_fromPlayer(O);
         if (isEnded()) break;
     }
 }

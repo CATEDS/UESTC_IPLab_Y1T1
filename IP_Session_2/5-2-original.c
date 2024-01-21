@@ -29,6 +29,10 @@ int GuessNumber(void) {
     srand((int)time(NULL));                                                 // Set the random seed for rand()
     int RightAnswer = rand()%32+1;                                          // Decide the right answer of the game by random
     int Answer;                                                             // Init the random variable to get the answer from the user
+
+        // CHEAT LINE
+        printf("%d\n",RightAnswer);
+
     int GuessesTime = 0;                                                    // Init the Guess times variable to calculate the result
     printf("Guess the integer between 1 and 32.\n");                        // Output the guide line
     while (true) {                                                          // Loop until the answer was right

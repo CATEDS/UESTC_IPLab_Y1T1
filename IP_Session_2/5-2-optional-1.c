@@ -28,6 +28,10 @@ int GuessNumber(void) {
     int Range = rand()%(200-LowerBound);                                                // Get the value of the range by random
     int RightAnswer = rand()%Range + LowerBound;                                        // Decide the right answer of the game by random
     int Answer;                                                                         // Init the random variable to get the answer from the user
+
+        // CHEAT LINE
+        printf("%d\n",RightAnswer);
+
     int GuessesTime = 0;                                                                // Init the Guess times variable to calculate the result
     printf("Guess the integer between %d and %d.\n", LowerBound, LowerBound + Range);   // Output the guide line
     while (true) {                                                                      // Loop until the answer was right

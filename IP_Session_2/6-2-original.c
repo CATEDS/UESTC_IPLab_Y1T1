@@ -1,9 +1,9 @@
 /*
-This is the program designed with the requirement of 6.2 Exercise, which gave the 
-programmer a specific main() function and the declaration of the drawRoom() function
-and ask the programmer to define 3 different functions to handle the work of the drawRoom()
-function. And the drawRoom() function is required to draw a room with specific length and width
-and also point out the position of given X and Y value.
+    This is the program designed with the requirement of 6.2 Exercise, which gave the 
+    programmer a specific main() function and the declaration of the drawRoom() function
+    and ask the programmer to define 3 different functions to handle the work of the drawRoom()
+    function. And the drawRoom() function is required to draw a room with specific length and width
+    and also point out the position of given X and Y value.
 */
 
 #include <stdio.h>                                      // Include the standard I/O library
